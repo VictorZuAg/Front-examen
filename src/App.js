@@ -4,10 +4,8 @@ import './App.css';
 import Content from './content'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
+import axios from 'axios'
 
-const User = ( props ) =>(
-  <li><Link to={{pathname: props.id, state:{datos:props}}} >{props.name}</Link></li>
-)
 
 class App extends Component {
   static PropTypes = {
@@ -21,32 +19,24 @@ class App extends Component {
 
   }
 
-  componentWillMount(){
-    fetch('http://localhost:3000/api/usuarios')
-      .then(response => response.json())
-      .then(usuarios=>{
-        usuarios.forEach(usuario => {
-          let datos = {
-            id : usuario.id,
-            nombre : usuario.nombre,
-            correo : usuario.correo
-          }
-          this.setState({ usuarios: this.state.usuarios.concat([datos])})
-        })
-      })
-  }
 
 
 
   render() {
     const {children} = this.props
 
+    axios.get('http://localhost:3001/api/usuarios')
+      .then(res =>{
+        const usuarios = res.data;
+        this.setState({usuarios})
+      })
+
         if(this.state.usuarios.length > 0){
           return(
             <div className="App">
             <input type="text" placeholder="Search" value={this.state.searchString} onChange={this.handleChange}/>
-              {this.state.usuarios.map(usuario => <User id={usuario.id} name={usuario.nombre} email={usuario.correo}/>)}
-              
+              {/* {this.state.usuarios.map(usuario => <User id={usuario.id} name={usuario.nombre} email={usuario.correo}/>)} */}
+              {this.state.usuarios.map(usuario => <li><Link to={{pathname: usuario.id, state:{datos:usuario}}} >{usuario.nombre}</Link></li>)}
               <Content body={children}/>
 
             </div>

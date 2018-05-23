@@ -34,7 +34,7 @@ class Compras extends Component{
         const {id} = this.props.match.params 
         const {datos} = this.props.location.state
         
-        axios.get(`http://localhost:3000/api/compras/${id}`)
+        axios.get(`http://localhost:3001/api/compras/${id}`)
       .then(res => {
         const persons = res.data;
         this.setState({ persons });
@@ -42,8 +42,8 @@ class Compras extends Component{
 
         return(
             <div>
-                <h1>{datos.name}</h1>
-                <h1>{datos.email}</h1>
+                <h1>{datos.nombre}</h1>
+                <h1>{datos.correo}</h1>
                 {/* <li>{this.props.compra}</li> */}
                 { this.state.persons.map(person => <li>{person.compra} - </li>)}
             </div>
